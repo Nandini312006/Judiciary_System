@@ -1,102 +1,689 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>NyayaAI</title>
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>JurisAI | Intelligent Legal Assistance System</title>
+    <!-- Google Fonts & Classic Serif Style -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (free icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
+        * {
             margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(to right, #0f172a, #1e293b);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            padding: 0;
+            box-sizing: border-box;
         }
         
-        .container {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 40px;
-            border-radius: 20px;
-            width: 400px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
-        }
-        
-        h1 {
-            font-family: 'Playfair Display', serif;
-            margin-bottom: 10px;
-            font-size: 32px;
-        }
-        
-        h2 {
-            font-size: 14px;
-            color: #cbd5e1;
-            margin-bottom: 30px;
-        }
-        
-        input {
-            padding: 10px;
-            border-radius: 8px;
-            border: none;
-            margin-bottom: 20px;
-            width: 100%;
-        }
-        
-        button {
-            padding: 12px;
-            width: 100%;
-            background: linear-gradient(to right, #2563eb, #1d4ed8);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        
-        button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px #2563eb;
-        }
-        
-        #output {
-            margin-top: 25px;
-            font-size: 15px;
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f1ea;
+            /* classic parchment-like tone */
+            color: #1e2a2e;
             line-height: 1.5;
-            color: #e2e8f0;
+        }
+        /* classic, elegant container */
+        
+        .app-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #fffef7;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.1);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* ========== LOGIN PAGE ========== */
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.4s ease;
         }
         
-        .loader {
-            margin-top: 15px;
+        .page.active-page {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Login specific */
+        
+        .login-container {
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #e9e5da 0%, #dcd3c0 100%);
+        }
+        
+        .login-card {
+            background: white;
+            max-width: 480px;
+            width: 90%;
+            padding: 2.5rem 2rem;
+            border-radius: 28px;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid #e7dfcf;
+            text-align: center;
+        }
+        
+        .login-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.6rem;
+            font-weight: 600;
+            color: #2c553c;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .login-sub {
+            color: #5f6c5d;
+            border-bottom: 1px solid #ece3d8;
+            display: inline-block;
+            padding-bottom: 6px;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+        
+        .input-group {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-group label {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #3e4d42;
+            display: block;
+            margin-bottom: 6px;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #ddd2bf;
+            border-radius: 20px;
+            font-size: 1rem;
+            background: #fefcf8;
+            transition: 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #9b7b4c;
+            box-shadow: 0 0 0 3px rgba(155, 123, 76, 0.2);
+        }
+        
+        .btn-primary {
+            background: #2c553c;
+            border: none;
+            padding: 12px 20px;
+            width: 100%;
+            border-radius: 40px;
+            font-weight: 600;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .btn-primary:hover {
+            background: #1f3f2c;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .legal-note {
+            margin-top: 1.8rem;
+            font-size: 0.75rem;
+            color: #8a7b66;
+        }
+        /* ========== DASHBOARD / MAIN LAYOUT ========== */
+        
+        .main-header {
+            background: #ffffffea;
+            backdrop-filter: blur(2px);
+            border-bottom: 2px solid #ece0cf;
+            padding: 0.8rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .logo-area h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: #2c553c;
+        }
+        
+        .logo-area span {
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            color: #836e4a;
+        }
+        
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-badge i {
+            font-size: 1.6rem;
+            color: #2c553c;
+        }
+        
+        .logout-btn {
+            background: none;
+            border: 1px solid #cfc3b0;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .logout-btn:hover {
+            background: #f2ebe0;
+            border-color: #9b7b4c;
+        }
+        /* classic navigation menu */
+        
+        .nav-menu {
+            background: #fffaf2;
+            padding: 0.6rem 2rem;
+            border-bottom: 1px solid #e9dfd1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .nav-item {
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            color: #4a5b4a;
+            cursor: pointer;
+            transition: 0.2s;
+            background: transparent;
+        }
+        
+        .nav-item i {
+            margin-right: 8px;
+        }
+        
+        .nav-item.active-nav {
+            background: #2c553c;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-item:hover:not(.active-nav) {
+            background: #e9e0d2;
+            color: #1e2a2e;
+        }
+        /* main content panels */
+        
+        .dashboard-content {
+            padding: 2rem 2rem 3rem;
+            flex: 1;
+        }
+        
+        .panel {
             display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .panel.active-panel {
+            display: block;
+        }
+        
+        .card-classic {
+            background: #ffffff;
+            border-radius: 28px;
+            border: 1px solid #ede3d4;
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.02);
+        }
+        
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2c3a2b;
+            border-left: 5px solid #b5976e;
+            padding-left: 16px;
+            margin-bottom: 1.5rem;
+        }
+        
+        textarea,
+        input[type="text"] {
+            width: 100%;
+            padding: 14px;
+            border-radius: 20px;
+            border: 1px solid #ddd2bf;
+            background: #fefcf8;
+            font-family: 'Inter', sans-serif;
+            resize: vertical;
+        }
+        
+        .btn-secondary {
+            background: #e9dfcf;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 40px;
+            font-weight: 500;
+            margin-top: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            background: #d8cbaf;
+        }
+        
+        .result-box {
+            background: #f9f5ed;
+            border-radius: 20px;
+            padding: 1rem;
+            margin-top: 1.2rem;
+            border-left: 4px solid #b5976e;
+            font-size: 0.95rem;
+        }
+        
+        .timeline-prediction {
+            background: #eef4ea;
+            padding: 1rem;
+            border-radius: 24px;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .flex-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            flex: 1;
+            background: #fefaf3;
+            border-radius: 24px;
+            padding: 1.2rem;
+            border: 1px solid #e6dbca;
+        }
+        
+        .badge-law {
+            background: #e4d9c8;
+            border-radius: 50px;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1.2rem;
+            font-size: 0.75rem;
+            border-top: 1px solid #ece2d4;
+            color: #7c6e58;
+        }
+        
+        @media (max-width: 760px) {
+            .main-header,
+            .nav-menu {
+                padding: 1rem;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 
 <body>
+    <div class="app-wrapper" id="appRoot">
+        <!-- LOGIN PAGE (page 1) -->
+        <div id="loginPage" class="page active-page">
+            <div class="login-container">
+                <div class="login-card">
+                    <div class="login-logo">
+                        <i class="fas fa-gavel" style="color:#9b7b4c; margin-right: 8px;"></i> JurisAI
+                    </div>
+                    <div class="login-sub">Intelligent Legal Assistance</div>
+                    <form id="loginForm">
+                        <div class="input-group">
+                            <label><i class="fas fa-envelope"></i> Email</label>
+                            <input type="email" id="loginEmail" placeholder="advocate@justice.ai" value="user@legalaid.com">
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-lock"></i> Password</label>
+                            <input type="password" id="loginPassword" placeholder="••••••" value="demo123">
+                        </div>
+                        <button type="submit" class="btn-primary"><i class="fas fa-arrow-right-to-bracket"></i> Access Dashboard</button>
+                        <div class="legal-note">
+                            <i class="fas fa-scale-balanced"></i> Demo: any credentials (demo mode)
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-    <div class="container">
-        <h1>NyayaAI ⚖️</h1>
-        <h2>Intelligent Legal Assistant</h2>
+        <!-- MAIN APP (DASHBOARD + MULTIPLE PAGES) -->
+        <div id="mainApp" class="page" style="display: none;">
+            <div class="main-header">
+                <div class="logo-area">
+                    <h2><i class="fas fa-balance-scale"></i> JurisAI · LexAssist</h2>
+                    <span>Intelligent Legal Assistance System</span>
+                </div>
+                <div class="user-badge">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userDisplay">Legal Officer</span>
+                    <button id="logoutBtnMain" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+            <!-- Classic Navigation Menu with multiple options -->
+            <div class="nav-menu">
+                <div class="nav-item" data-panel="summaryPanel"><i class="fas fa-file-alt"></i> Document Summarizer</div>
+                <div class="nav-item" data-panel="timelinePanel"><i class="fas fa-calendar-clock"></i> Case Timeline</div>
+                <div class="nav-item" data-panel="simplifyPanel"><i class="fas fa-language"></i> Legal Simplifier</div>
+                <div class="nav-item" data-panel="insightsPanel"><i class="fas fa-chart-line"></i> Justice Insights</div>
+                <div class="nav-item" data-panel="resourcesPanel"><i class="fas fa-book-open"></i> Legal Resources</div>
+            </div>
 
-        <input type="file" id="fileInput">
+            <div class="dashboard-content">
+                <!-- PANEL 1: SUMMARIZER -->
+                <div id="summaryPanel" class="panel active-panel">
+                    <div class="card-classic">
+                        <div class="section-title"><i class="fas fa-file-contract"></i> AI Legal Document Summarizer</div>
+                        <p>Paste a legal document, judgment, or case brief. Our agentic AI extracts core facts, rulings, and key points.</p>
+                        <textarea id="legalDocInput" rows="6" placeholder="Paste legal document text here... e.g., 'In the High Court of Delhi, Civil Suit No. 452/2023. The petitioner argued that the contract was breached due to non-delivery of goods within stipulated time. The respondent contended force majeure...'"></textarea>
+                        <button id="summarizeBtn" class="btn-secondary"><i class="fas fa-robot"></i> Summarize Document</button>
+                        <div id="summaryResult" class="result-box" style="display: none;"></div>
+                    </div>
+                </div>
 
-        <button onclick="uploadFile()">Summarize Document</button>
+                <!-- PANEL 2: CASE TIMELINE PREDICTION -->
+                <div id="timelinePanel" class="panel">
+                    <div class="card-classic">
+                        <div class="section-title"><i class="fas fa-hourglass-half"></i> AI Case Timeline Predictor</div>
+                        <p>Enter case type and complexity to estimate expected resolution timeline (based on historical patterns).</p>
+                        <div class="flex-row" style="gap: 1rem; align-items: flex-end;">
+                            <div style="flex:2">
+                                <label>Case Category</label>
+                                <select id="caseTypeSelect" style="width:100%; padding: 12px; border-radius: 20px; border:1px solid #ddd2bf;">
+                                <option value="civil">Civil Dispute</option>
+                                <option value="criminal">Criminal Trial</option>
+                                <option value="family">Family / Matrimonial</option>
+                                <option value="corporate">Corporate / Commercial</option>
+                                <option value="property">Property / Land Dispute</option>
+                            </select>
+                            </div>
+                            <div style="flex:1">
+                                <label>Complexity Level</label>
+                                <select id="complexitySelect" style="width:100%; padding:12px; border-radius:20px;">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                            </div>
+                            <div style="flex:1">
+                                <button id="predictTimelineBtn" class="btn-secondary" style="margin-top: 24px;"><i class="fas fa-chart-simple"></i> Predict Timeline</button>
+                            </div>
+                        </div>
+                        <div id="timelineResult" class="result-box" style="margin-top: 20px; display: none;"></div>
+                    </div>
+                    <div class="card-classic">
+                        <div class="section-title"><i class="fas fa-gavel"></i> Current Court Delay Index</div>
+                        <div class="timeline-prediction">
+                            <i class="fas fa-chart-line"></i> <strong>National average pending duration:</strong> ~3.2 years (civil) | ~1.8 years (criminal). <br> Agentic AI suggests early mediation reduces delays by ~34%.
+                        </div>
+                    </div>
+                </div>
 
-        <div class="loader" id="loader">⏳ Processing...</div>
+                <!-- PANEL 3: LEGAL SIMPLIFIER (simplify legal jargon) -->
+                <div id="simplifyPanel" class="panel">
+                    <div class="card-classic">
+                        <div class="section-title"><i class="fas fa-universal-access"></i> Plain Language Simplifier</div>
+                        <p>Translate complex legal clauses, statutes, or judgment excerpts into easy-to-understand language.</p>
+                        <textarea id="complexLegalText" rows="5" placeholder="e.g., 'Pursuant to the aforementioned indenture, the lessor hereby covenants to maintain the demised premises in habitable condition, subject to the lessee's compliance with all obligations...'"></textarea>
+                        <button id="simplifyTextBtn" class="btn-secondary"><i class="fas fa-lightbulb"></i> Simplify for Public</button>
+                        <div id="simplifyResult" class="result-box" style="display: none;"></div>
+                    </div>
+                </div>
 
-        <p id="output"></p>
+                <!-- PANEL 4: JUSTICE INSIGHTS + AGENTIC STATS -->
+                <div id="insightsPanel" class="panel">
+                    <div class="card-classic">
+                        <div class="section-title"><i class="fas fa-chart-pie"></i> AI-Powered Justice Analytics</div>
+                        <div class="flex-row">
+                            <div class="stat-card"><i class="fas fa-file-signature"></i> <strong>Case clearance rate</strong><br> (2024): 67% <br><span class="badge-law">+5% vs 2023</span></div>
+                            <div class="stat-card"><i class="fas fa-clock"></i> <strong>Avg. disposal time</strong><br> 412 days <br><span class="badge-law">Agentic prediction: -12% with AI</span></div>
+                            <div class="stat-card"><i class="fas fa-users"></i> <strong>Public legal awareness</strong><br> 48% → 72% (target 2026)</div>
+                        </div>
+                        <div class="result-box" style="margin-top: 20px;">
+                            <i class="fas fa-microchip"></i> <strong>Agentic AI Recommendation:</strong> Implement pre-litigation summarization to reduce judicial workload by 28% and prioritize urgent cases via timeline prediction.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PANEL 5: RESOURCES / LEGAL KNOWLEDGE BASE -->
+                <div id="resourcesPanel" class="panel">
+                    <div class="card-classic">
+                        <div class="section-title"><i class="fas fa-database"></i> Legal Resource Hub</div>
+                        <ul style="margin-left: 1.5rem; line-height: 1.8;">
+                            <li><i class="fas fa-check-circle" style="color:#2c553c;"></i> <strong>Constitution of India</strong> – Fundamental Rights simplified guide</li>
+                            <li><i class="fas fa-check-circle" style="color:#2c553c;"></i> <strong>IPC & CrPC</strong> – Essential sections explained</li>
+                            <li><i class="fas fa-check-circle" style="color:#2c553c;"></i> <strong>Legal Aid Clinics</strong> – Directory of pro bono services</li>
+                            <li><i class="fas fa-check-circle" style="color:#2c553c;"></i> <strong>e-Courts Project</strong> – Case status & digital access</li>
+                            <li><i class="fas fa-check-circle" style="color:#2c553c;"></i> <strong>Glossary of Legal Terms</strong> – 200+ terms simplified</li>
+                        </ul>
+                        <div class="result-box" style="margin-top: 20px;">
+                            <i class="fas fa-graduation-cap"></i> <strong>Public Legal FAQ:</strong> "What is an affidavit?" "How to file a PIL?" – Ask our upcoming AI chatbot (coming soon).
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer>
+                <i class="fas fa-scale-balanced"></i> JurisAI – Accelerating Justice with Agentic Intelligence | For demonstration & legal assistance research
+            </footer>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // DOM Elements
+        const loginPage = document.getElementById('loginPage');
+        const mainApp = document.getElementById('mainApp');
+        const loginForm = document.getElementById('loginForm');
+        const logoutBtn = document.getElementById('logoutBtnMain');
+        const userDisplaySpan = document.getElementById('userDisplay');
 
+        // Navigation items
+        const navItems = document.querySelectorAll('.nav-item');
+        const panels = document.querySelectorAll('.panel');
+
+        // Helper: switch panel
+        function switchPanel(panelId) {
+            panels.forEach(panel => {
+                panel.classList.remove('active-panel');
+                if (panel.id === panelId) {
+                    panel.classList.add('active-panel');
+                }
+            });
+            navItems.forEach(item => {
+                const targetPanel = item.getAttribute('data-panel');
+                item.classList.remove('active-nav');
+                if (targetPanel === panelId) {
+                    item.classList.add('active-nav');
+                }
+            });
+        }
+
+        // Attach nav events
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const target = item.getAttribute('data-panel');
+                if (target) switchPanel(target);
+            });
+        });
+
+        // LOGIN simulation
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            // simple demo validation (any non-empty)
+            if (email === "") {
+                alert("Please enter an email (demo mode accepts any)");
+                return;
+            }
+            // set username display (show email prefix)
+            let displayName = email.split('@')[0] || "Legal User";
+            userDisplaySpan.innerText = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+            // switch pages
+            loginPage.classList.remove('active-page');
+            loginPage.style.display = 'none';
+            mainApp.style.display = 'block';
+            mainApp.classList.add('active-page');
+            // ensure summary panel active by default after login
+            switchPanel('summaryPanel');
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            mainApp.style.display = 'none';
+            mainApp.classList.remove('active-page');
+            loginPage.style.display = 'block';
+            loginPage.classList.add('active-page');
+            // reset any forms inside main if needed (optional)
+            document.getElementById('loginEmail').value = "user@legalaid.com";
+            document.getElementById('loginPassword').value = "demo123";
+            // clear results
+            clearAllResults();
+        });
+
+        function clearAllResults() {
+            document.getElementById('summaryResult').style.display = 'none';
+            document.getElementById('timelineResult').style.display = 'none';
+            document.getElementById('simplifyResult').style.display = 'none';
+            document.getElementById('legalDocInput').value = '';
+            document.getElementById('complexLegalText').value = '';
+        }
+
+        // ========== 1. DOCUMENT SUMMARIZER (agentic simulation) ==========
+        const summarizeBtn = document.getElementById('summarizeBtn');
+        const legalDocInput = document.getElementById('legalDocInput');
+        const summaryResultDiv = document.getElementById('summaryResult');
+
+        summarizeBtn.addEventListener('click', () => {
+            const text = legalDocInput.value.trim();
+            if (!text) {
+                alert("Please paste a legal document to summarize.");
+                return;
+            }
+            // AI simulation: extract key points, main issue, conclusion
+            let summaryText = "";
+            if (text.length < 30) {
+                summaryText = "Provided text is too short. Please provide a meaningful legal excerpt for summarization.";
+            } else {
+                // heuristic intelligent summary
+                const sentences = text.split(/[.!?]/).filter(s => s.trim().length > 15);
+                const mainClaim = sentences.length > 0 ? sentences[0].trim() : "Parties dispute the core obligations.";
+                const ruling = text.includes("court") ? "The judicial authority may consider precedents." : "Legal analysis required on contractual/statutory basis.";
+                let issues = "Based on document, primary issues involve breach of duty, interpretation of clauses.";
+                if (text.toLowerCase().includes("force majeure")) issues = "Force majeure invoked; key question: unforeseeable circumstances.";
+                if (text.toLowerCase().includes("contract")) issues = "Contractual interpretation and performance obligations in focus.";
+                summaryText = `📄 AI-Generated Summary:\n• Core Issue: ${mainClaim.substring(0, 120)}...\n• Legal Arguments: ${issues}\n• Potential Outcome Indicator: ${ruling}\n• Key statutes referenced: General principles of equity and justice. (Agentic insight: early settlement advised)`;
+            }
+            summaryResultDiv.innerHTML = `<i class="fas fa-scroll"></i> <strong>Intelligent Summary</strong><br>${summaryText.replace(/\n/g, '<br>')}`;
+            summaryResultDiv.style.display = 'block';
+        });
+
+        // ========== 2. TIMELINE PREDICTION ==========
+        const predictBtn = document.getElementById('predictTimelineBtn');
+        const caseTypeSelect = document.getElementById('caseTypeSelect');
+        const complexitySelect = document.getElementById('complexitySelect');
+        const timelineResultDiv = document.getElementById('timelineResult');
+
+        predictBtn.addEventListener('click', () => {
+            const caseType = caseTypeSelect.value;
+            const complexity = complexitySelect.value;
+            let baseMonths = 0;
+            if (caseType === 'civil') baseMonths = 18;
+            else if (caseType === 'criminal') baseMonths = 14;
+            else if (caseType === 'family') baseMonths = 12;
+            else if (caseType === 'corporate') baseMonths = 16;
+            else baseMonths = 20; // property
+
+            let multiplier = 1;
+            if (complexity === 'low') multiplier = 0.7;
+            else if (complexity === 'medium') multiplier = 1;
+            else multiplier = 1.6;
+
+            let predictedMonths = Math.round(baseMonths * multiplier);
+            let predictedYears = (predictedMonths / 12).toFixed(1);
+            let rangeLow = Math.max(6, predictedMonths - 4);
+            let rangeHigh = predictedMonths + 6;
+
+            timelineResultDiv.innerHTML = `
+            <i class="fas fa-calendar-alt"></i> <strong>AI Case Timeline Prediction</strong><br>
+            Case: ${caseType.charAt(0).toUpperCase() + caseType.slice(1)} &nbsp;| Complexity: ${complexity.toUpperCase()}<br>
+            📅 Estimated resolution: <strong>${predictedMonths} months</strong> (~${predictedYears} years)<br>
+            ⚖️ Confidence range: ${rangeLow} – ${rangeHigh} months<br>
+            🤖 Agentic recommendation: Use pre-trial mediation or AI-assisted case management to reduce delay by up to 30%.
+        `;
+            timelineResultDiv.style.display = 'block';
+        });
+
+        // ========== 3. LEGAL SIMPLIFIER ==========
+        const simplifyBtn = document.getElementById('simplifyTextBtn');
+        const complexInput = document.getElementById('complexLegalText');
+        const simplifyResult = document.getElementById('simplifyResult');
+
+        simplifyBtn.addEventListener('click', () => {
+            let legalJargon = complexInput.value.trim();
+            if (!legalJargon) {
+                alert("Please paste a legal text or clause to simplify.");
+                return;
+            }
+            // advanced plain language conversion simulation
+            let simplified = legalJargon;
+            simplified = simplified.replace(/pursuant to/gi, "according to");
+            simplified = simplified.replace(/hereinafter/gi, "later in this document");
+            simplified = simplified.replace(/aforementioned/gi, "mentioned earlier");
+            simplified = simplified.replace(/indenture/gi, "legal agreement");
+            simplified = simplified.replace(/covenants/gi, "promises");
+            simplified = simplified.replace(/demised premises/gi, "rented property");
+            simplified = simplified.replace(/lessor/gi, "landlord");
+            simplified = simplified.replace(/lessee/gi, "tenant");
+            simplified = simplified.replace(/hereby/gi, "by this document");
+            simplified = simplified.replace(/subject to/gi, "depending on");
+            simplified = simplified.replace(/obligations/gi, "duties");
+            if (simplified === legalJargon && legalJargon.length > 10) {
+                simplified = "📖 Plain language version: " + legalJargon.substring(0, 180) + " ... In simple terms, this clause defines responsibilities and conditions that both parties must follow as per standard legal practice.";
+            }
+            simplifyResult.innerHTML = `<i class="fas fa-comment-dots"></i> <strong>Simplified (Plain English)</strong><br>${simplified}<br><br><span class="badge-law">✨ Enhanced readability for citizens & litigants</span>`;
+            simplifyResult.style.display = 'block';
+        });
+
+        // prevent default init if login already shown correctly, but ensure initial no conflict
+        // also if someone accidentally switches before login? not possible because login page active
+        // nice classic UI
+    </script>
 </body>
 
 </html>
