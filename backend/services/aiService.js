@@ -11,7 +11,7 @@ let apiKey = null;
  * Called once on server startup.
  */
 function initializeAI() {
-    apiKey = process.env.GROQ_API_KEY ? .trim() || null;
+    apiKey = process.env.GROQ_API_KEY?.trim() || null;
     if (!apiKey || apiKey === "your_groq_api_key_here") {
         console.error(
             "⚠️  GROQ_API_KEY is not set. Please add GROQ_API_KEY to backend/.env and restart the server."
